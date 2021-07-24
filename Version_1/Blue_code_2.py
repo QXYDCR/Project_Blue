@@ -394,13 +394,14 @@ for train_time in range(5):
         episode_action = torch.LongTensor(episode_action)
 
         episode_true_action = torch.LongTensor(episode_true_action)
+
         H = F.cross_entropy(episode_pi, episode_true_action)
-        R = ALPHA * 1.0 * (L_ / L) + H
+        R = -ALPHA * 1.0 * (L_ / L) + H
 
         # log(π(a|s) + ... log(
         selected_logprobs = R * torch.gather(episode_pi, 1,  episode_action).squeeze()
 
-        loss_actor = -selected_logprobs.mean()
+        loss_actor = selected_logprobs.mean()
         loss_actor = torch.tensor(loss_actor, requires_grad = True)
         optimizer_Actor.zero_grad()
         loss_actor.backward()
