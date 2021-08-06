@@ -29,8 +29,11 @@ pos_dict_file = 'C:/Users/Chihiro/Desktop/RL Paper/Git Code/Code 102/' \
 neg_dict_file = 'C:/Users/Chihiro/Desktop/RL Paper/Git Code/Code 102/' \
                 'Project_Blue/Version_3/Emotion_Dict/dict/negative.txt'
 
+
 pos_dict_std = load_dict(pos_dict_file)
 neg_dict_std = load_dict(neg_dict_file)
+
+
 
 # 加载预定义词向量，并且将自定义词典中的单词映射成词向量
 # 预加载的词向量为50维的wiki
@@ -70,7 +73,7 @@ test_label = labels[test_size : 2 * test_size]
 
 class Actor(nn.Module):
     def __init__(self, vocab_size=len(vocab), embedding_dim=50, hidden_size=50,
-                 pretrained_embed=word2vec, is_updata_w2c=True, n_class=2):
+                 pretrained_embed=word2vec, is_updata_w2c=False, n_class=2):
         super(Actor, self).__init__()
         self.vocab_size = vocab_size
         self.embedding_dim = embedding_dim
@@ -107,7 +110,7 @@ opti_actor = torch.optim.Adam(actor.parameters(), lr = 0.001)
 
 class Critic(nn.Module):
     def __init__(self, vocab_size=len(vocab), embedding_dim=50, hidden_size=50,
-                 pretrained_embed=word2vec, is_updata_w2c=True, n_class=2, batch = BATCH):
+                 pretrained_embed=word2vec, is_updata_w2c=False, n_class=2, batch = BATCH):
         super(Critic, self).__init__()
         self.vocab_size = vocab_size
         self.embedding_dim = embedding_dim
@@ -239,13 +242,6 @@ for epoch in range(4):
         L_L_ = (true_actions == pred_actions.squeeze()).sum().item() / x.shape[0]
 
         R = H + L_L_ * 0.6
-        # s_nn = torch.argmax(out, 1)
-        # if s_nn == y:
-        #     R =  L_L_
-        # else:
-        #     R =  - L_L_
-        # # actions_pair = torch.exp(actions_pair)
-        # neg_log_prob= F.cross_entropy(input=actions_pair, target= true_actions)
         selected_logprobs = R * torch.gather(actions_pair, 1, pred_actions).squeeze()
 
         loss_actor = -1 * R * selected_logprobs.mean()
@@ -263,7 +259,7 @@ for epoch in range(4):
         opti_actor.step()
         optimizer_FC.step()
 
-        if i % 100 == 0:
+        if i % 500 == 0:
             right_ratio = 1.0 * np.sum([i[0] for i in rights]) / np.sum([i[1] for i in rights])
             print('epoch: {}, 数据准确率: {:.5f}  loss: {:.5f}'.format(epoch + 1,right_ratio,
                                     torch.mean(torch.stack(actor_loss))))
@@ -276,6 +272,8 @@ for epoch in range(4):
             # print("Save parameters")
 
 # ------------------------ 7、测试网络模型 ------------------------
+
+
 
 
 

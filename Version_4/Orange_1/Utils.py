@@ -29,6 +29,16 @@ def filter_punc(sentence):
     return(sentence)
 
 
+file_path = 'C:/Users/Chihiro/Desktop/RL Paper/Project/Project_Blue_1' \
+            '/数据集/情感极性词典/snownlp_stopwords.txt'
+def load_stopwords(fname = file_path):
+    stopwords = set()
+    with open(file_path, 'r', encoding='utf-8') as f:
+        for word in f:
+            stopwords.add(word.strip())
+
+    return stopwords
+
 # ------------------- 从pos,neg文本(原始句子, 未被切分)中读取,并返回字典 -------------------
 def read_data_from_pos_neg(pos_file, neg_file, is_filter = True, is_freq = False):
     """
@@ -149,7 +159,6 @@ def idxs_2_words(idxs, vocab, dict):
 
 
 
-
 # ------------------- 建立单词的词向量映射 -------------------
 # 加载预定义的词向量, 并将每一个单词映射成预向量中存在的向量
 def build_word2vec(pre_word2vec, vocab):
@@ -166,11 +175,7 @@ def build_word2vec(pre_word2vec, vocab):
     true_count_vec = 0
     i = 0
     for word in vocab.keys():
-        if i > 7000:
-            print(i)
-            i += 1
         try:
-            a = vocab[word]
             word_vecs[vocab[word]] = model[word]
             true_count_vec += 1
         except KeyError:
@@ -183,15 +188,17 @@ def build_word2vec(pre_word2vec, vocab):
 # 加载现有的词语极性词典
 def load_dict(file):
     """
-    :param file: 文件名
-    :return: 极性词典
+    :param file: (str), 文件名
+    :return: (dict), 极性词典
     """
     with  open(file, encoding='utf-8', errors='ignore') as fp:
         lines = fp.readlines()
         lines = [l.strip() for l in lines]
-        print("Load data from file (%s) finished !" % file)
         dictionary = [word.strip() for word in lines]
-    return set(dictionary)
+    dict = {}
+    for i, w in enumerate(dictionary):
+        dict[w] = i
+    return dict
 
 
 # ------------------- 将文本转化为数字 -------------------
@@ -242,6 +249,7 @@ def convert_emotion_text_to_num(emotion_text, vocab, max_len = 50, is_filter = T
     """
 
     contents, labels = [], []
+    stop_words = load_stopwords()
 
     with open(emotion_text, encoding='utf-8') as f:
         for idx, line in enumerate(f):
@@ -249,7 +257,14 @@ def convert_emotion_text_to_num(emotion_text, vocab, max_len = 50, is_filter = T
                 #过滤标点符号
                 line = filter_punc(line)
             #分词
-            words = jieba.lcut(line.strip())
+            words = []
+            pre_words = jieba.lcut(line.strip())
+
+            # 过滤停顿词
+            for w in pre_words:
+                if w not in stop_words:
+                    words.append(w)
+
             content = [vocab.get(w, 0) for w in words]
             # 截取最大长度
             content = content[:max_len]
@@ -323,12 +338,214 @@ def random_data(dataset, labels):
     return dataset, labels
 
 
+def get_score(I, idx, E):
+    for i in range(len(E)):
+        if E[i] == 0:
+            E[i] = 0
+        elif E[i] == 1:
+            E[i] = 1
+        else:
+            E[i] = -1
+
+    size = 30
+    C = np.zeros(size)
+    ALPHA = 0.8
+    S_V = 6
+
+    for i in range(size):
+        if i == 0:
+            C[0] = I[0]
+        else:
+            if I[i] == 0:
+                C[i] = ALPHA * C[i - 1]
+            else:
+                C[i] = C[i - 1] + I[i]
+
+    score = 0
+    # 给定当前位置，如何Ct-1 == 0
+    if idx == 0:
+        score = I[0]
+    elif C[idx - 1] == 0:   # 1
+        if E[idx] == 0:  # 判断当前的词的情感[-1, 0, 1]
+            score = -np.abs(I[idx])
+        else:
+            score = I[idx] * E[idx]
+    elif C[idx - 1] * I[idx] > 0:   # 2
+        if E[idx] * C[idx - 1] > 0:
+            score = S_V
+        elif E[idx] * C[idx - 1] < 0:
+            score = -S_V
+        else:
+            score = -np.abs(I[idx])
+    else:
+        if E[idx] * C[idx - 1] >= 0:
+            score = S_V - np.abs(I[idx])
+        else:
+            score = (S_V - np.abs(I[idx])) * np.abs(I[idx])
+
+    score = np.clip(score, -6, 6) / 6
+    return score
+
+
+def get_episode_score(I, A):
+    size = 30
+    std = 6
+    # A = C
+    # 更改A的动作搭配
+    for i in range(30):
+        if A[i] == 0:    # 积极情感
+            A[i] = 1
+        elif A[i] == 1:  # 消极情感:
+            A[i] = -1
+        else:
+            A[i] = 0     # 中性
+
+    scores = np.zeros(size)
+    Q = np.zeros(size)
+
+
+    ALPHA = 1.2
+    gamma = 0.95
+    # 计算句子累积情感Q值
+    for i in range(30):
+        if i == 0:      #如果i = 0时, 单独考虑
+            Q[i] = I[i]
+        else:
+            if I[i] == 0:  # 如果当前词的BlsonNLP值为0，即代表中性
+                Q[i] = ALPHA * Q[i - 1]
+            else:  # 当前词拥有正负的含义
+                Q[i] = I[i] + Q[i - 1] * gamma
+
+    # 计算词语的得分:
+    # A: [0, 1, -1], 积极、消极、中性
+    for i in range(30):
+        if i == 0:      #如果i = 0时, 单独考虑
+            scores[i] = Q[i]
+        else:
+            if Q[i - 1] == 0:       # 如果前面句子为中性
+                if A[i] == 0:       # 如果当前动作为中性
+                    scores[i] = -np.abs(I[i])
+                else:
+                    scores[i] = I[i] * A[i]
+            elif Q[i - 1] * I[i] > 0:   # 如果前面句子和当前词语的感情相同，即标签正确
+                if Q[i - 1] * A[i] > 0: # 预测正确
+                    scores[i] = std
+                elif  Q[i - 1] * A[i] < 0:  # 预测错误
+                    scores[i] = -std
+                else:
+                    scores[i] = -np.abs(I[i])
+            elif Q[i - 1] * I[i] < 0:  # 如果前面句子和当前词语的感情相反，根据大小改表情感
+                if Q[i - 1] * A[i] >= 0:  # 预测正确
+                    scores[i] = std - np.abs(I[i])
+                else:
+                    scores[i] = (np.abs(I[i]) - np.abs(Q[i - 1]))* np.abs(I[i])
 
 
 
+    # 归一化处理
+    scores = torch.tensor(scores) / 6
+    # scores -= torch.mean(scores)
+    # scores /= torch.std(scores)
+
+    # 更改A的动作搭配
+    for i in range(30):
+        if A[i] == 1:  # 积极情感
+            A[i] = 0
+        elif A[i] == -1:  # 消极情感:
+            A[i] = 1
+        else:
+            A[i] = 2  # 中性
+
+    return scores
+
+
+def get_episode_score2(I, A):
+    size = 30
+    std = 6
+    # A = C
+    # 更改A的动作搭配
+    for i in range(size):
+        if A[i] == 0:    # 积极情感
+            A[i] = 1
+        elif A[i] == 1:  # 消极情感:
+            A[i] = -1
+        else:
+            A[i] = 0     # 中性
+
+    scores = np.zeros(size)
+    Q = np.zeros(size)
+
+    ALPHA = 1.2
+    gamma = 0.9
+    # 计算句子累积情感Q值
+    for i in range(size):
+        if i == 0:      #如果i = 0时, 单独考虑
+            Q[i] = I[i]
+        else:
+            if I[i] == 0:  # 如果当前词的BlsonNLP值为0，即代表中性
+                Q[i] = ALPHA * Q[i - 1]
+            else:  # 当前词拥有正负的含义
+                Q[i] = I[i] + Q[i - 1] * gamma
+
+    # 计算词语的得分:
+    # A: [0, 1, -1], 积极、消极、中性
+    for i in range(size):
+        if i == 0:      #如果i = 0时, 单独考虑
+            scores[i] = Q[i]
+        else:
+            if Q[i - 1] == 0:       # 如果前面句子为中性
+                if A[i] == 0:       # 如果当前动作为中性
+                    # scores[i] = -np.abs(I[i])
+                    scores[i] = np.abs(I[i])
+                else:
+                    scores[i] = I[i] * A[i]
+            elif Q[i - 1] * I[i] > 0:   # 如果前面句子和当前词语的感情相同，即标签正确
+                if Q[i - 1] * A[i] > 0: # 预测正确
+                    scores[i] = std
+                elif  Q[i - 1] * A[i] < 0:  # 预测错误
+                    scores[i] = -std
+                else:
+                    scores[i] = -np.abs(I[i])
+            elif Q[i - 1] * I[i] < 0:  # 如果前面句子和当前词语的感情相反，根据大小改表情感
+                if Q[i - 1] * A[i] >= 0:  # 预测正确
+                    scores[i] = std - np.abs(I[i])
+                else:
+                    scores[i] = (np.abs(I[i]) - np.abs(Q[i - 1]))* np.abs(I[i])
+                # if Q[i] * A[i] > 0:
+                #     scores[i] = np.abs(I[i])
+                # else:
+                #     scores[i] = (np.abs(I[i]) - np.abs(Q[i - 1])) * np.abs(I[i])
+
+
+    # 归一化处理
+    scores = torch.tensor(scores) / std
+    # scores -= torch.mean(scores)
+    # scores /= torch.std(scores)
+
+    # 更改A的动作搭配
+    for i in range(size):
+        if A[i] == 1:  # 积极情感
+            A[i] = 0
+        elif A[i] == -1:  # 消极情感:
+            A[i] = 1
+        else:
+            A[i] = 2  # 中性
+
+    return scores
 
 
 
+def discount_and_norm_rewards(scores):
+    # discount episode rewards
+    # generate a array with the same type and shape as given array
+    discounted_ep_rs = np.zeros_like(scores)
+    running_add = 0
+    for t in range(0, len(scores)):
+        running_add = running_add * 1 + scores[t]
+        discounted_ep_rs[t] = running_add
+
+
+    return torch.FloatTensor(discounted_ep_rs)
 
 
 

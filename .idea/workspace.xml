@@ -34,7 +34,7 @@
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/Version_4/Orange_1" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/Version_5/violet" />
     <property name="settings.editor.selected.configurable" value="reference.idesettings.debugger.python" />
   </component>
   <component name="PyDebuggerOptionsProvider">
@@ -42,18 +42,62 @@
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\Chihiro\Desktop\RL Paper\Git Code\Code 102\Project_Blue\Version_5\violet" />
+      <recent name="C:\Users\Chihiro\Desktop\RL Paper\Git Code\Code 102\Project_Blue\Version_5\violet\ipython" />
       <recent name="C:\Users\Chihiro\Desktop\RL Paper\Git Code\Code 102\Project_Blue\Version_4\Orange_1" />
       <recent name="C:\Users\Chihiro\Desktop\RL Paper\Git Code\Code 102\Project_Blue\Version_4\Orange_1\data" />
       <recent name="C:\Users\Chihiro\Desktop\RL Paper\Git Code\Code 102\Project_Blue\Version_3\blue_code_3" />
-      <recent name="C:\Users\Chihiro\Desktop\RL Paper\Git Code\Code 102\Project_Blue\Version_3\Emotion_Dict" />
-      <recent name="C:\Users\Chihiro\Desktop\RL Paper\Git Code\Code 102\Project_Blue\Version_3\movie emotion\Dataset" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\Chihiro\Desktop\RL Paper\Git Code\Code 102\Project_Blue\Version_4\Orange_1" />
+      <recent name="C:\Users\Chihiro\Desktop\RL Paper\Git Code\Code 102\Project_Blue\Version_5\violet" />
       <recent name="C:\Users\Chihiro\Desktop\RL Paper\Git Code\Code 102\Project_Blue\Version_3\Emotion_Dict" />
       <recent name="C:\Users\Chihiro\Desktop\RL Paper\Git Code\Code 102\Project_Blue\Jupyter_Resource" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.LSTM_CELL">
+  <component name="RunManager" selected="Python.Demo (1)">
+    <configuration name="BlsonNLP" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="Project_Blue" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Version_4/Orange_1" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Version_4/Orange_1/BlsonNLP.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="Demo (1)" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="Project_Blue" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Version_5/violet" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Version_5/violet/Demo.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <configuration name="Demo" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="Project_Blue" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -96,28 +140,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="Movie_view_LSTM_Cell" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="Project_Blue" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Version_3/movie emotion" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Version_3/movie emotion/Movie_view_LSTM_Cell.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="main" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="Sentiment_score" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="Project_Blue" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -129,28 +152,7 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Version_4/Orange_1/main.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="orange_1_2" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="Project_Blue" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Version_4/Orange_1" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Version_4/Orange_1/orange_1_2.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Version_4/Orange_1/Sentiment_score.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -161,11 +163,11 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.LSTM_CELL" />
-        <item itemvalue="Python.orange_1_2" />
-        <item itemvalue="Python.main" />
-        <item itemvalue="Python.Movie_view_LSTM_Cell" />
+        <item itemvalue="Python.Demo (1)" />
+        <item itemvalue="Python.BlsonNLP" />
+        <item itemvalue="Python.Sentiment_score" />
         <item itemvalue="Python.Demo" />
+        <item itemvalue="Python.LSTM_CELL" />
       </list>
     </recent_temporary>
   </component>
@@ -188,24 +190,57 @@
           <line>165</line>
           <option name="timeStamp" value="13" />
         </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/Version_5/violet/model.py</url>
+          <line>55</line>
+          <option name="timeStamp" value="18" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/Version_4/Orange_1/Utils.py</url>
+          <line>542</line>
+          <option name="timeStamp" value="19" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/Version_4/Orange_1/Sentiment_score.py</url>
+          <line>185</line>
+          <option name="timeStamp" value="36" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/Version_4/Orange_1/Sentiment_score.py</url>
+          <line>175</line>
+          <option name="timeStamp" value="39" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/Version_4/Orange_1/BlsonNLP.py</url>
+          <line>363</line>
+          <option name="timeStamp" value="40" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/Version_4/Orange_1/BlsonNLP.py</url>
+          <line>405</line>
+          <option name="timeStamp" value="41" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/Version_4/Orange_1/BlsonNLP.py</url>
+          <line>419</line>
+          <option name="timeStamp" value="42" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/Version_4/Orange_1/Sentiment_score.py</url>
+          <line>196</line>
+          <option name="timeStamp" value="43" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/Version_4/Orange_1/Sentiment_score.py</url>
+          <line>197</line>
+          <option name="timeStamp" value="44" />
+        </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
     <watches-manager>
-      <configuration name="PythonConfigurationType">
-        <watch expression="y" />
-        <watch expression="x" />
-        <watch expression="hidden" />
-        <watch expression="out" />
-        <watch expression="actions_pair" />
-        <watch expression="pred_actions" />
-        <watch expression="selected_logprobs" />
-        <watch expression="h" />
-        <watch expression="outputs" />
-        <watch expression="a" />
-        <watch expression="h_a" language="Python" />
-        <watch expression="true_actions" />
-        <watch expression="H" />
-      </configuration>
+      <inline-watch fileUrl="file://$PROJECT_DIR$/Version_4/Orange_1/Utils.py" line="461">
+        <watch expression="A" language="Python" />
+      </inline-watch>
     </watches-manager>
   </component>
 </project>

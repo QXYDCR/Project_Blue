@@ -107,7 +107,7 @@ fc_loss = []
 rights = []
 
 
-for epoch in range(4):
+for epoch in range(8):
     for i, data in enumerate(zip(train_data, train_label)):
         # x, y --> [50, b], [b,]
         x, y = data
@@ -130,7 +130,7 @@ for epoch in range(4):
         opti_critic.step()
 
 
-        if i % 100 == 0:
+        if i % 500 == 0:
             right_ratio = 1.0 * np.sum([i[0] for i in rights]) / np.sum([i[1] for i in rights])
             print('epoch: {}, 数据准确率: {:.5f}  loss: {:.5f}'.format(epoch + 1,right_ratio,
                                     torch.mean(torch.stack(critic_loss))))
