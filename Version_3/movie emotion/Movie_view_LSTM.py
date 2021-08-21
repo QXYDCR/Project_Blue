@@ -13,7 +13,7 @@ torch.manual_seed(SEED)
 np.random.seed(SEED)
 
 # 读取文件内容并构建词典
-vocab = read_build_vocab(['Dataset/test.txt'])
+vocab = read_build_vocab(['Dataset/train.txt'])
 mark_star()
 
 # 加载预定义词向量，并且将自定义词典中的单词映射成词向量
@@ -92,7 +92,7 @@ optimizer = torch.optim.Adam(model.parameters(), lr = 0.001)
 save_path = 'Mv.ztl'
 max_acc = 0
 
-for epoch in range(4):
+for epoch in range(1):
     accurates = []
     for i, data in enumerate(train_dataloader):
         x, y = data
@@ -129,7 +129,7 @@ model.load_state_dict(torch.load(save_path))
 
 # 加载训练用的数据
 test_dataset = TensorDataset(torch.from_numpy(test_contents), torch.LongTensor(test_labels))
-test_dataloader = DataLoader(dataset = train_dataset, batch_size = 32, shuffle = True, drop_last = True)
+test_dataloader = DataLoader(dataset = test_dataset, batch_size = 32, shuffle = True, drop_last = True)
 
 print(test_predict(test_dataloader, model))
 

@@ -93,9 +93,68 @@ class Critic(nn.Module):
         c = torch.zeros(self.batch, self.hidden_size)
         return h, c
 
-critic = Critic()
+# critic = Critic()
+# loss_func_critic = nn.CrossEntropyLoss()
+# opti_critic = torch.optim.Adam(critic.parameters(), lr = 0.001)
+
+
+class BiLSTM_Attention(nn.Module):
+    def __init__(self, vocab_size=len(vocab), embedding_dim=50, hidden_size=50,
+                 pretrained_embed=word2vec, is_updata_w2c=True, n_class=2, batch=BATCH):
+        super(BiLSTM_Attention, self).__init__()
+        # embedding之后的shape: torch.Size([200, 8, 300])
+        # 使用预训练的词向量
+        self.embedding = nn.Embedding(vocab_size, embedding_dim)
+        self.embedding.weight.data.copy_(torch.from_numpy(pretrained_embed))
+        self.embedding.weight.requires_grad = is_updata_w2c
+
+        # bidirectional设为True即得到双向循环神经网络
+        self.encoder = nn.LSTM(input_size=embedding_dim,
+                               hidden_size=hidden_size,
+                               num_layers=2,
+                               batch_first=False,
+                               bidirectional=True)
+        # 初始时间步和最终时间步的隐藏状态作为全连接层输入
+        self.w_omega = nn.Parameter(torch.Tensor(
+            hidden_size * 2, hidden_size * 2))
+        self.u_omega = nn.Parameter(torch.Tensor(hidden_size * 2, 1))
+        self.decoder = nn.Linear(2 * hidden_size, 2)
+
+        nn.init.uniform_(self.w_omega, -0.1, 0.1)
+        nn.init.uniform_(self.u_omega, -0.1, 0.1)
+
+    def forward(self, inputs):
+        # inputs的形状是(seq_len,batch_size)
+        embeddings = self.embedding(inputs)
+        # 提取词特征，输出形状为(seq_len,batch_size,embedding_dim)
+        # rnn.LSTM只返回最后一层的隐藏层在各时间步的隐藏状态。
+        outputs, _ = self.encoder(embeddings)  # output, (h, c)
+        # outputs形状是(seq_len,batch_size, 2 * num_hiddens)
+        x = outputs.permute(1, 0, 2)
+        # x形状是(batch_size, seq_len, 2 * num_hiddens)
+
+        # Attention过程
+        u = torch.tanh(torch.matmul(x, self.w_omega))
+        # u形状是(batch_size, seq_len, 2 * num_hiddens)
+        att = torch.matmul(u, self.u_omega)
+        # att形状是(batch_size, seq_len, 1)
+        att_score = F.softmax(att, dim=1)
+        # att_score形状仍为(batch_size, seq_len, 1)
+        scored_x = x * att_score
+        # scored_x形状是(batch_size, seq_len, 2 * num_hiddens)
+        # Attention过程结束
+        F.dropout()
+        feat = torch.sum(scored_x, dim=1)
+        # feat形状是(batch_size, 2 * num_hiddens)
+        outs = self.decoder(feat)
+        # out形状是(batch_size, 2)
+        return outs
+
+model = BiLSTM_Attention()
 loss_func_critic = nn.CrossEntropyLoss()
-opti_critic = torch.optim.Adam(critic.parameters(), lr = 0.001)
+opti_critic = torch.optim.Adam(model.parameters(), lr = 0.001)
+mark_star()
+print(model)
 
 # ------------------------ 6、训练网络模型 ------------------------
 
@@ -114,10 +173,7 @@ for epoch in range(8):
         x = torch.LongTensor(x).view(-1, 1)
         y = torch.LongTensor(y)
 
-        h_c, c_c = critic.init_H_C()
-
-        for j in range(x.shape[0]):
-            h_c, c_c, out = critic(x[j], h_c, c_c)
+        out = model(x)
 
         lo_critic = loss_func_critic(out, y)
 

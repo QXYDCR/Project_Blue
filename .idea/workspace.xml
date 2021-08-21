@@ -34,7 +34,7 @@
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/Version_5/violet" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../../../大家好我是王树森系列/Text-Classification-Models-Pytorch-master" />
     <property name="settings.editor.selected.configurable" value="reference.idesettings.debugger.python" />
   </component>
   <component name="PyDebuggerOptionsProvider">
@@ -42,11 +42,11 @@
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\Chihiro\Desktop\RL Paper\Git Code\Code 102\Project_Blue\Version_5\transformer_attention\transformer" />
+      <recent name="C:\Users\Chihiro\Desktop\RL Paper\Git Code\Code 102\Project_Blue\Version_5\transformer_attention\ipython" />
       <recent name="C:\Users\Chihiro\Desktop\RL Paper\Git Code\Code 102\Project_Blue\Version_5\violet" />
       <recent name="C:\Users\Chihiro\Desktop\RL Paper\Git Code\Code 102\Project_Blue\Version_5\violet\ipython" />
       <recent name="C:\Users\Chihiro\Desktop\RL Paper\Git Code\Code 102\Project_Blue\Version_4\Orange_1" />
-      <recent name="C:\Users\Chihiro\Desktop\RL Paper\Git Code\Code 102\Project_Blue\Version_4\Orange_1\data" />
-      <recent name="C:\Users\Chihiro\Desktop\RL Paper\Git Code\Code 102\Project_Blue\Version_3\blue_code_3" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\Chihiro\Desktop\RL Paper\Git Code\Code 102\Project_Blue\Version_4\Orange_1" />
@@ -55,8 +55,8 @@
       <recent name="C:\Users\Chihiro\Desktop\RL Paper\Git Code\Code 102\Project_Blue\Jupyter_Resource" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.Demo (1)">
-    <configuration name="BlsonNLP" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+  <component name="RunManager" selected="Python.model">
+    <configuration name="Utils" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="Project_Blue" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -64,11 +64,11 @@
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Version_4/Orange_1" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Version_5/transformer_attention/transformer_demo_green" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Version_4/Orange_1/BlsonNLP.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Version_5/transformer_attention/transformer_demo_green/Utils.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -77,7 +77,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="Demo (1)" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="data" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="Project_Blue" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -85,11 +85,11 @@
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Version_5/violet" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Version_5/transformer_attention/transformer_demo_green" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Version_5/violet/Demo.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Version_5/transformer_attention/transformer_demo_green/data.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -98,7 +98,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="Demo" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="main" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="Project_Blue" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -106,11 +106,11 @@
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Version_4/Orange_1" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Version_5/transformer_attention/transformer" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Version_4/Orange_1/Demo.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Version_5/transformer_attention/transformer/main.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -119,7 +119,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="LSTM_CELL" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="mask" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="Project_Blue" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -127,11 +127,11 @@
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Version_4/Orange_1" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Version_5/transformer_attention/transformer" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Version_4/Orange_1/LSTM_CELL.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Version_5/transformer_attention/transformer/mask.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -140,7 +140,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="Sentiment_score" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="model" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="Project_Blue" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -148,11 +148,11 @@
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Version_4/Orange_1" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Version_5/transformer_attention/transformer_demo_green" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Version_4/Orange_1/Sentiment_score.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Version_5/transformer_attention/transformer_demo_green/model.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -163,11 +163,11 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.Demo (1)" />
-        <item itemvalue="Python.BlsonNLP" />
-        <item itemvalue="Python.Sentiment_score" />
-        <item itemvalue="Python.Demo" />
-        <item itemvalue="Python.LSTM_CELL" />
+        <item itemvalue="Python.model" />
+        <item itemvalue="Python.Utils" />
+        <item itemvalue="Python.data" />
+        <item itemvalue="Python.main" />
+        <item itemvalue="Python.mask" />
       </list>
     </recent_temporary>
   </component>
@@ -235,9 +235,32 @@
           <line>197</line>
           <option name="timeStamp" value="44" />
         </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/Version_5/transformer_attention/transformer/mask.py</url>
+          <line>37</line>
+          <option name="timeStamp" value="46" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/Version_5/transformer_attention/transformer/mask.py</url>
+          <line>15</line>
+          <option name="timeStamp" value="48" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/Version_5/transformer_attention/transformer/main.py</url>
+          <line>111</line>
+          <option name="timeStamp" value="49" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/Version_5/transformer_attention/transformer_demo_green/Utils.py</url>
+          <line>30</line>
+          <option name="timeStamp" value="56" />
+        </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
     <watches-manager>
+      <configuration name="PythonConfigurationType">
+        <watch expression="pe" />
+      </configuration>
       <inline-watch fileUrl="file://$PROJECT_DIR$/Version_4/Orange_1/Utils.py" line="461">
         <watch expression="A" language="Python" />
       </inline-watch>

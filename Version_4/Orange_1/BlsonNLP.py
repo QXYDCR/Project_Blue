@@ -78,20 +78,12 @@ dataset, labels = random_data(dataset, labels)
 
 # 切分数据集
 test_size = len(dataset) // 10
-train_data = dataset[5 * test_size :]
-train_label = labels[5 * test_size :]
+train_data = dataset[4 * test_size :]
+train_label = labels[4 * test_size :]
 train_data = np.asarray(train_data)
 train_label = np.asarray(train_label)
-train_dataset = TensorDataset(torch.from_numpy(train_data), torch.LongTensor(train_label))
-train_dataloader = DataLoader(dataset = train_dataset, batch_size = 32, shuffle = True, drop_last = True)
-
-mark_star()
-s = Sentiment_Score()
-for i, data in enumerate(zip(train_data, train_label)):
-    # x, y --> [30, 1], [1,]
-    x, y = data
-    ff = convert_num_to_txt(x, vocab)
-
+# train_dataset = TensorDataset(torch.from_numpy(train_data), torch.LongTensor(train_label))
+# train_dataloader = DataLoader(dataset = train_dataset, batch_size = 32, shuffle = True, drop_last = True)
 
 
 mark_star()
@@ -101,7 +93,8 @@ valid_label = labels[: test_size]
 
 test_data = dataset[test_size : 2 * test_size]
 test_label = labels[test_size : 2 * test_size]
-
+test_data = np.asarray(test_data)
+test_label = np.asarray(test_label)
 
 # ------------------------ 5、定义网络模型 ------------------------
 
@@ -142,6 +135,8 @@ class Actor(nn.Module):
         c = torch.zeros(1, self.hidden_size)
         return h, c
 
+
+
 class FC_Classifier(nn.Module):
     def __init__(self, hidden_size = 50, n_class = 2):
         super(FC_Classifier, self).__init__()
@@ -170,198 +165,118 @@ rights = []
 reward = []
 
 EPSILON = 0.2
-for epoch in range(8):
-    EPSILON = 0.2 - (epoch) * 0.2 / 8
-
-    for i, data in enumerate(zip(train_data, train_label)):
-        # x, y --> [30, 1], [1,]
-        x, y = data
-        ff = convert_num_to_txt(x, vocab)
-        x = torch.LongTensor(x).view(-1, 1)
-        y = torch.LongTensor(y)
-
-        true_actions = []  # 真实动作
-        pred_actions = []  # 预测动作
-        actions_pair = []  # 回合预测动作对
-
-        h, c = actor.init_H_C()
-        out = 0
-        I = []             # 词语级情感评分
-
-        for j in range(x.shape[0]):
-            h, c, out = actor(x[j], h, c)
-
-            out = torch.log_softmax(out, 1)
-            actions_pair.append(out)
-            pred_actions.append(torch.argmax(out, dim=1))
-
-            w = idx2word(x[j], vocab)
-            # e-greedy
-            if np.random.rand() > EPSILON:
-                if w in pos_dict_std:
-                    true_actions.append(0)
-                elif w in neg_dict_std:
-                    true_actions.append(1)
-                else:
-                    true_actions.append(2)
-            else:
-                true_actions.append(np.random.randint(0, 3))
-
-            # 得到当前词语的情感评分
-            # w = idx2word(x[j], vocab)
-            s = word_socre.get(idx2word(x[j], vocab), 0)
-            if s > 0:
-                # true_actions.append(0)
-                s = s * 0.35
-            # elif s < 0:
-            #     true_actions.append(1)
-            # else:
-            #     true_actions.append(1)
-            I.append(s)
-
-        # 回合更新参数
-        actor.optimizer.zero_grad()
-        fc.optimizer.zero_grad()
-
-        true_actions = torch.LongTensor(true_actions)
-        # [30, 1]
-        pred_actions = torch.LongTensor(pred_actions).unsqueeze(1)
-        # 将含有tensor的list转化为tensor, [32, 2]
-        actions_pair = torch.cat(tuple(actions_pair), 0)
-
-        # 计算回合的得分, 每个步骤都有分
-        scores = get_episode_score2(I, pred_actions.numpy())
-        # scores = discount_and_norm_rewards(scores)
-        reward.append(scores.sum())
-        # selected_logprobs = torch.gather(actions_pair, 1, pred_actions).squeeze()
-        selected_logprobs = actor.criterion(actions_pair, pred_actions.squeeze())
-
-        loss_actor = -(scores *  selected_logprobs).mean()
-        # print(scores)
-        # 更新FC
-        fc_func = fc.loss_FC_func(out, y)
-
-        # 保存值
-        acc = get_accurate(out, y)
-        rights.append(acc)
-
-        actor_loss.append(loss_actor)
-        fc_loss.append(fc_func)
-
-        loss_actor.backward(retain_graph = True)
-        fc_func.backward()
-        # bp
-        actor.optimizer.step()
-        fc.optimizer.step()
-
-        if i % 400 == 0:
-            right_ratio = 1.0 * np.sum([i[0] for i in rights]) / np.sum([i[1] for i in rights])
-            print('epoch: {},\t数据准确率: {:.5f}\tfc_loss: {:.5f}\tactor_loss: {:.5f}\treward: {:.5f}'.
-                                    format(epoch + 1,right_ratio,
-                                    torch.mean(torch.stack(fc_loss)),
-                                    torch.mean(torch.stack(actor_loss)),
-                                           np.mean(reward)))
-
-            fc_loss = []
-            rights = []
-            actor_loss = []
-            critic_loss = []
-            reward = []
+#
+# for epoch in range(8):
+#     EPSILON = 0.2 - (epoch) * 0.2 / 8
+# 
+#     for i, data in enumerate(zip(train_data, train_label)):
+#         # x, y --> [30, 1], [1,]
+#         x, y = data
+#         # ff = convert_num_to_txt(x, vocab)
+#         x = torch.LongTensor(x).view(-1, 1)
+#         y = torch.LongTensor(y)
+# 
+#         true_actions = []  # 真实动作
+#         pred_actions = []  # 预测动作
+#         actions_pair = []  # 回合预测动作对
+# 
+#         h, c = actor.init_H_C()
+#         out = 0
+#         I = []             # 词语级情感评分
+# 
+#         for j in range(x.shape[0]):
+#             h, c, out = actor(x[j], h, c)
+# 
+#             out = torch.log_softmax(out, 1)
+#             actions_pair.append(out)
+#             pred_actions.append(torch.argmax(out, dim=1))
+# 
+#             w = idx2word(x[j], vocab)
+#             # e-greedy
+#             if np.random.rand() > EPSILON:
+#                 if w in pos_dict_std:
+#                     true_actions.append(0)
+#                 elif w in neg_dict_std:
+#                     true_actions.append(1)
+#                 else:
+#                     true_actions.append(2)
+#             else:
+#                 true_actions.append(np.random.randint(0, 3))
+# 
+#             # 得到当前词语的情感评分
+#             # w = idx2word(x[j], vocab)
+#             s = word_socre.get(idx2word(x[j], vocab), 0)
+#             if s > 0:
+#                 # true_actions.append(0)
+#                 s = s * 0.4
+#             # elif s < 0:
+#             #     true_actions.append(1)
+#             # else:
+#             #     true_actions.append(1)
+#             I.append(s)
+# 
+#         # 回合更新参数
+#         actor.optimizer.zero_grad()
+#         fc.optimizer.zero_grad()
+# 
+#         true_actions = torch.LongTensor(true_actions)
+#         # [30, 1]
+#         pred_actions = torch.LongTensor(pred_actions).unsqueeze(1)
+#         # 将含有tensor的list转化为tensor, [32, 2]
+#         actions_pair = torch.cat(tuple(actions_pair), 0)
+# 
+#         # 计算回合的得分, 每个步骤都有分
+#         scores = get_episode_score2(I, pred_actions.numpy())
+#         # scores = discount_and_norm_rewards(scores)
+#         reward.append(scores.sum())
+#         # selected_logprobs = torch.gather(actions_pair, 1, pred_actions).squeeze()
+#         selected_logprobs = actor.criterion(actions_pair, pred_actions.squeeze())
+# 
+#         loss_actor = -(scores *  selected_logprobs).mean()
+#         # print(scores)
+#         # 更新FC
+#         fc_func = fc.loss_FC_func(out, y)
+# 
+#         # 保存值
+#         acc = get_accurate(out, y)
+#         rights.append(acc)
+# 
+#         actor_loss.append(loss_actor)
+#         fc_loss.append(fc_func)
+# 
+#         loss_actor.backward(retain_graph = True)
+#         fc_func.backward()
+#         # bp
+#         actor.optimizer.step()
+#         fc.optimizer.step()
+# 
+#         if i % 400 == 0:
+#             right_ratio = 1.0 * np.sum([i[0] for i in rights]) / np.sum([i[1] for i in rights])
+#             print('epoch: {},\t数据准确率: {:.5f}\tfc_loss: {:.5f}\tactor_loss: {:.5f}\treward: {:.5f}'.
+#                                     format(epoch + 1,right_ratio,
+#                                     torch.mean(torch.stack(fc_loss)),
+#                                     torch.mean(torch.stack(actor_loss)),
+#                                            np.mean(reward)))
+#             fc_loss = []
+#             rights = []
+#             actor_loss = []
+#             critic_loss = []
+#             reward = []
 
 # ------------------------ 7、测试网络模型 ------------------------
 
 
-actor_2 = Actor()
 
-def train_adaboost():
-    actor_loss = []
-    fc_loss = []
-    rights = []
-    reward = []
 
-    for epoch in range(4):
-        for i, data in enumerate(zip(train_data, train_label)):
-            # x, y --> [30, 1], [1,]
-            x, y = data
-            ff = convert_num_to_txt(x, vocab)
-            x = torch.LongTensor(x).view(-1, 1)
-            y = torch.LongTensor(y)
-
-            true_actions = []  # 真实动作
-            pred_actions = []  # 预测动作
-            actions_pair = []  # 回合预测动作对
-
-            label_accu = 0
-
-            h, c = actor.init_H_C()
-            h2, c2 = actor_2.init_H_C()
-            out2 = 0
-            out = 0
-            I = []  # 词语级情感评分
-
-            for j in range(x.shape[0]):
-                h, c, out = actor(x[j], h, c)
-                h2, c2, out2 = actor_2(x[j], h2, c2)
-
-                # 得到当前词语的情感评分
-                s = word_socre.get(idx2word(x[j], vocab), 0)
-                if s > 0:
-                    true_actions.append(0)
-                    s = s * 0.4
-                elif s < 0:
-                    true_actions.append(1)
-                else:
-                    true_actions.append(2)
-
-                I.append(s)
-
-            # 回合更新参数
-            actor.optimizer.zero_grad()
-            fc.optimizer.zero_grad()
-
-            if np.sum(I) > 0:
-                label_accu = 0
-            elif np.sum(I) < 0:
-                label_accu = 1
-            else:
-                label_accu = 2
-
-            # 更新FC, 使用另外一个out2
-            fc_func = fc.loss_FC_func(out2, y)
-
-            # 保存值
-            acc = get_accurate(out2, y)
-            rights.append(acc)
-
-            fc_loss.append(fc_func)
-
-            fc_func.backward()
-
-            # bp
-            fc.optimizer.step()
-
-            if i % 400 == 0:
-                right_ratio = 1.0 * np.sum([i[0] for i in rights]) / np.sum([i[1] for i in rights])
-                print('epoch: {},\t数据准确率: {:.5f}\tfc_loss: {:.5f}}'.
-                      format(epoch + 1, right_ratio,
-                             torch.mean(torch.stack(fc_loss))))
-                fc_loss = []
-                rights = []
-
-# train_adaboost()
-
-def train_2_self_score():
-    actor_loss = []
-    fc_loss = []
-    rights = []
-    reward = []
-
+history = {'acc':[], 'loss':[], 'eval_acc':[], 'eval_loss':[]}
+def train_attention():
     for epoch in range(8):
         EPSILON = 0.2 - (epoch) * 0.2 / 8
+        train = {'acc': 0, 'loss':0}
         for i, data in enumerate(zip(train_data, train_label)):
             # x, y --> [30, 1], [1,]
             x, y = data
-            ff = convert_num_to_txt(x, vocab)
+            # ff = convert_num_to_txt(x, vocab)
             x = torch.LongTensor(x).view(-1, 1)
             y = torch.LongTensor(y)
 
@@ -371,7 +286,7 @@ def train_2_self_score():
 
             h, c = actor.init_H_C()
             out = 0
-            I = []             # 词语级情感评分
+            I = []  # 词语级情感评分
 
             for j in range(x.shape[0]):
                 h, c, out = actor(x[j], h, c)
@@ -394,69 +309,219 @@ def train_2_self_score():
 
                 # 得到当前词语的情感评分
                 # w = idx2word(x[j], vocab)
-                # s = word_socre.get(idx2word(x[j], vocab), 0)
-                # if s > 0:
-                #     # true_actions.append(0)
-                #     s = s * 0.35
+                s = word_socre.get(idx2word(x[j], vocab), 0)
+                if s > 0:
+                    # true_actions.append(0)
+                    s = s * 0.4
                 # elif s < 0:
                 #     true_actions.append(1)
                 # else:
                 #     true_actions.append(1)
-                # I.append(s)
-            ff = s.regular_text(ff)
-            I, _ = s.get_sentence_scores(ff, vocab)
-            for jj in I:
-                if jj > 0:
-                    jj *= 0.4
+                I.append(s)
 
             # 回合更新参数
             actor.optimizer.zero_grad()
             fc.optimizer.zero_grad()
 
-            true_actions = torch.LongTensor(true_actions)
-            # [30, 1]
             pred_actions = torch.LongTensor(pred_actions).unsqueeze(1)
             # 将含有tensor的list转化为tensor, [32, 2]
             actions_pair = torch.cat(tuple(actions_pair), 0)
 
             # 计算回合的得分, 每个步骤都有分
             scores = get_episode_score2(I, pred_actions.numpy())
-            # scores = discount_and_norm_rewards(scores)
-            reward.append(scores.sum())
+            # reward.append(scores.sum())
             # selected_logprobs = torch.gather(actions_pair, 1, pred_actions).squeeze()
             selected_logprobs = actor.criterion(actions_pair, pred_actions.squeeze())
 
-            loss_actor = (scores *  selected_logprobs).mean()
+            loss_actor = -(scores * selected_logprobs).mean()
             # print(scores)
             # 更新FC
             fc_func = fc.loss_FC_func(out, y)
 
             # 保存值
             acc = get_accurate(out, y)
-            rights.append(acc)
+            train['acc'] += acc[0]
+            # actor_loss.append(loss_actor)
+            # fc_loss.append(fc_func)
+            train['loss'] += fc_func.item()
 
-            actor_loss.append(loss_actor)
-            fc_loss.append(fc_func)
-
-            loss_actor.backward(retain_graph = True)
+            loss_actor.backward(retain_graph=True)
             fc_func.backward()
             # bp
             actor.optimizer.step()
             fc.optimizer.step()
 
-            if i % 400 == 0:
-                right_ratio = 1.0 * np.sum([i[0] for i in rights]) / np.sum([i[1] for i in rights])
-                print('epoch: {},\t数据准确率: {:.5f}\tfc_loss: {:.5f}\tactor_loss: {:.5f}\treward: {:.5f}'.
-                                        format(epoch + 1,right_ratio,
-                                        torch.mean(torch.stack(fc_loss)),
-                                        torch.mean(torch.stack(actor_loss)),
-                                               np.mean(reward)))
+        train['acc'] /= len(train_data)
+        train['loss'] /= len(train_data)
+        history['acc'].append(train['acc'])
+        history['loss'].append(train['loss'])
 
-                fc_loss = []
-                rights = []
-                actor_loss = []
-                critic_loss = []
-                reward = []
+        print('epoch: {},\t数据准确率: {:.5f}\tfc_loss: {:.5f}'.
+              format(epoch + 1, train['acc'], train['loss']))
 
-# train_2_self_score()
+
+def eval_data(test_data, label):
+    actor.eval()
+    for epoch in range(8):
+        test = {'acc': 0, 'loss': 0}
+        for i, data in enumerate(zip(test_data, label)):
+            # x, y --> [30, 1], [1,]
+            x, y = data
+            # ff = convert_num_to_txt(x, vocab)
+            x = torch.LongTensor(x).view(-1, 1)
+            y = torch.LongTensor(y)
+            true_actions = []  # 真实动作
+            pred_actions = []  # 预测动作
+            actions_pair = []  # 回合预测动作对
+            h, c = actor.init_H_C()
+            out = 0
+            I = []  # 词语级情感评分
+
+            for j in range(x.shape[0]):
+                h, c, out = actor(x[j], h, c)
+
+                out = torch.log_softmax(out, 1)
+                actions_pair.append(out)
+                pred_actions.append(torch.argmax(out, dim=1))
+
+                w = idx2word(x[j], vocab)
+                # e-greedy
+                if np.random.rand() > EPSILON:
+                    if w in pos_dict_std:
+                        true_actions.append(0)
+                    elif w in neg_dict_std:
+                        true_actions.append(1)
+                    else:
+                        true_actions.append(2)
+                else:
+                    true_actions.append(np.random.randint(0, 3))
+
+                s = word_socre.get(idx2word(x[j], vocab), 0)
+                if s > 0:
+                    s = s * 0.4
+                I.append(s)
+
+            fc_func = fc.loss_FC_func(out, y)
+
+            # 保存值
+            acc = get_accurate(out, y)
+            # print("acc: ", acc)
+            test['acc'] += acc[0]
+            # actor_loss.append(loss_actor)
+            # fc_loss.append(fc_func)
+            test['loss'] += fc_func.item()
+        print("acc: ", test['acc'], "len: ", len(test_data))
+        test['acc'] /= len(test_data)
+        test['loss'] /= len(test_data)
+        history['eval_acc'].append(test['acc'])
+        history['eval_loss'].append(test['loss'])
+
+        print('epoch: {},\t测试 数据准确率: {:.5f}\tfc_loss: {:.5f}'.
+              format(epoch + 1, test['acc'], test['loss']))
+
+    return history['eval_acc'], history['eval_loss']
+
+train_attention()
+
+def plot_perf(history, final_perf):
+    '''
+        Function to plot performance plots, i.e. evolution of metrics during training
+        on train, val and test sets.
+    '''
+    epochs = range(1, len(history['loss'])+1)
+    for key in ['loss', 'acc']:
+        plt.figure(figsize=(6,4))
+        plt.plot(epochs, history[key], '+-b', label=key)
+        plt.plot(epochs, history['eval_'+key], '+-g', label='val_'+key)
+        # plt.axhline(y=final_perf[key], color='r', linestyle='--', label='test_'+key)
+        plt.legend()
+        plt.title('Evolution of {} during training'.format(key))
+        plt.plot()
+
+    plt.show()
+
+test_performence = eval_data(test_data, test_label)
+plot_perf(history, test_performence)
+
+
+def train_LSTM_STD():
+    for epoch in range(8):
+        EPSILON = 0.2 - (epoch) * 0.2 / 8
+        train = {'acc': 0, 'loss':0}
+        for i, data in enumerate(zip(train_data, train_label)):
+            # x, y -->[30,] -> [30, 1], [1,]
+            x, y = data
+            # ff = convert_num_to_txt(x, vocab)
+            x = torch.LongTensor(x).view(-1, 1)
+            y = torch.LongTensor(y)
+
+            h, c = actor.init_H_C()
+            out = 0
+            for j in range(x.shape[0]):
+                h, c, out = actor(x[j], h, c)
+
+            out = torch.log_softmax(out, 1)
+            # 保存值
+            acc = get_accurate(out, y)
+
+            actor.optimizer.zero_grad()
+            loss = actor.criterion(out, y)
+            loss.backward()
+            actor.optimizer.step()
+
+            train['acc'] += acc[0]
+            train['loss'] += loss.item()
+
+        train['acc'] /= len(train_data)
+        train['loss'] /= len(train_data)
+        history['acc'].append(train['acc'])
+        history['loss'].append(train['loss'])
+
+        print('epoch: {},\t数据准确率: {:.5f}\tfc_loss: {:.5f}'.
+              format(epoch + 1, train['acc'], train['loss']))
+
+def eval_LSM_STD_data(test_data, label):
+    actor.eval()
+    for epoch in range(8):
+        train = {'acc': 0, 'loss': 0}
+        for i, data in enumerate(zip(test_data, label)):
+            # x, y -->[30,] -> [30, 1], [1,]
+            x, y = data
+            # ff = convert_num_to_txt(x, vocab)
+            x = torch.LongTensor(x).view(-1, 1)
+            y = torch.LongTensor(y)
+
+            h, c = actor.init_H_C()
+            out = 0
+            for j in range(x.shape[0]):
+                h, c, out = actor(x[j], h, c)
+
+            out = torch.log_softmax(out, 1)
+            # 保存值
+            acc = get_accurate(out, y)
+
+            loss = actor.criterion(out, y)
+
+            train['acc'] += acc[0]
+            train['loss'] += loss.item()
+
+        train['acc'] /= len(test_data)
+        train['loss'] /= len(test_data)
+        history['eval_acc'].append(train['acc'])
+        history['eval_loss'].append(train['loss'])
+
+        print('epoch: {},\t 测试 数据准确率: {:.5f}\tfc_loss: {:.5f}'.
+              format(epoch + 1, train['acc'], train['loss']))
+
+    return history['eval_acc'], history['eval_loss']
+
+# train_LSTM_STD()
+# test_performence = eval_LSM_STD_data(test_data=test_data, label = test_label)
+# plot_perf(history, test_performence)
+#
+
+
+
+
+
 
